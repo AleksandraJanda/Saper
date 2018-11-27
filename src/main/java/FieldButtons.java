@@ -1,34 +1,36 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 class FieldButtons {
     private static int buttonSize = 10;
     private static List<JButton> listOfButtons = new ArrayList<>();
-    private static JButton[][] buttonArray = new JButton[10][10];
+    private static List<JButton> bombButtons = new ArrayList<>();
+    private static List<Integer> buttonNumbers = new ArrayList<>();
     private static int numberOfButtons = 100;
     private static int ii = 10;
     private static int gap = 0;
+    private static int numberOfBombs = 15;
     private static ImageIcon bombImg = new ImageIcon("files/bomb.png");
     private static ImageIcon emptyImg = new ImageIcon("files/empty.png");
     private static ImageIcon oneImg = new ImageIcon("files/one.png");
     private static ImageIcon twoImg = new ImageIcon("files/two.png");
     private static ImageIcon threeImg = new ImageIcon("files/three.png");
-    private static List<ImageIcon> listOfImages = Arrays.asList(bombImg,emptyImg,oneImg,twoImg);
+    private static ImageIcon fourImg = new ImageIcon("files/four.png");
+    private static ImageIcon fiveImg = new ImageIcon("files/five.png");
 
     JPanel setFieldContent(){
         JPanel panel = new JPanel();
         panel.setSize(Window.width,Window.height);
         panel.setLayout(new GridLayout(ii, numberOfButtons / ii, gap, gap));
         makeListOfButtons(panel);
+        setBombs();
+        selectImage();
         panel.setBackground(Color.black);
         panel.setVisible(true);
         return panel;
@@ -36,13 +38,10 @@ class FieldButtons {
     private JButton makeButton(){
         JButton button = new JButton();
         button.setBorder(new LineBorder(Color.black));
-        button.setBackground(Color.lightGray);
+        button.setBackground(Color.gray);
         button.setPreferredSize(new Dimension(buttonSize, buttonSize));
+        button.setIcon(emptyImg);
         setRevealButton(button);
-        Random random = new Random();
-        button.setIcon(listOfImages.get(random.nextInt(listOfImages.size())));
-        button.setBackground(Color.lightGray);
-
         return button;
     }
     private void makeListOfButtons(JPanel panel){
@@ -52,19 +51,73 @@ class FieldButtons {
             panel.add(button);
         }
     }
-    private void makeArrayOfButtons(){
-        int k = 0;
-        for (JButton[] rowButtonArray : buttonArray) {
-            for (int j = 0; j < buttonArray.length; j++) {
-                rowButtonArray[j].add(listOfButtons.get(k));
-                k++;
+    private void setBombs(){
+        Random random = new Random();
+        for(int i = 0; i<numberOfBombs; i++){
+            JButton button = listOfButtons.get(random.nextInt(numberOfButtons));
+            button.setIcon(bombImg);
+            bombButtons.add(button);
+        }
+        listOfButtons.get(11).setIcon(bombImg);
+
+    }
+
+    private void selectImage(){
+        List<List<Integer>> allButtonNumberLists = new ArrayList<>();
+        for(int i = 0; i<listOfButtons.size(); i++){
+            buttonNumbers = new ArrayList<>();
+            buttonNumbers.add(i);
+            if(i -1>=90||(i -1>=0&&!String.valueOf(i -1).contains("9"))){
+                buttonNumbers.add(i -1);
+            }
+            if(i +1<=99&&!String.valueOf(i +1).contains("0")){
+                buttonNumbers.add(i +1);
+            }
+            if(i +10<=99){
+                buttonNumbers.add(i +10);
+                if(i +10-1>=90||(i +10-1>=0&&!String.valueOf(i +10-1).contains("9"))){
+                    buttonNumbers.add(i +10-1);
+                }
+                if(i +10+1>=0&&!String.valueOf(i +10+1).contains("0")){
+                    buttonNumbers.add(i +10+1);
+                }
+            }
+            if(i -10>=0){
+                buttonNumbers.add(i -10);
+                if(i -10-1>=0&&!String.valueOf(i -10-1).contains("9")){
+                    buttonNumbers.add(i -10-1);
+                }
+                if(i -10+1>=0&&!String.valueOf(i -10+1).contains("0")){
+                    buttonNumbers.add(i -10+1);
+                }
+            }
+            allButtonNumberLists.add(buttonNumbers);
+        }
+
+        for(int i = 0; i<allButtonNumberLists.size(); i++){
+            int count = 0;
+            for(int j = 1; j<allButtonNumberLists.get(i).size(); j++){
+                if(listOfButtons.get(allButtonNumberLists.get(i).get(j)).getIcon()==bombImg){
+                    count++;
+                }
+            }
+            System.out.println(count);
+            if(listOfButtons.get(i).getIcon()!=bombImg) {
+                if (count == 0) {
+                    listOfButtons.get(i).setIcon(emptyImg);
+                } else if (count == 1) {
+                    listOfButtons.get(i).setIcon(oneImg);
+                } else if (count == 2) {
+                    listOfButtons.get(i).setIcon(twoImg);
+                } else if (count == 3){
+                    listOfButtons.get(i).setIcon(threeImg);
+                } else if (count == 4){
+                    listOfButtons.get(i).setIcon(fourImg);
+                } else {
+                    listOfButtons.get(i).setIcon(fiveImg);
+                }
             }
         }
-    }
-    private void selectImage(){
-        Random random = new Random();
-        buttonArray[0][0].setIcon(listOfImages.get(random.nextInt(listOfImages.size())));
-        
     }
     private void setRevealButton(JButton button){
         button.addMouseListener(makeVisible);

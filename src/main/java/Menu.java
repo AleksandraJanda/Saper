@@ -13,7 +13,7 @@ class Menu {
         menuBar.add(reset);
         info = addMenu("INFO");
         info.addSeparator();
-        information = addMenuItem("Click on field to reveal");
+        information = addMenuItem("There are 15 bombs hidden!");
         info.add(information);
         menuBar.add(info);
         return menuBar;
