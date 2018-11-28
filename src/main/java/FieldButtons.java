@@ -1,24 +1,15 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
 
 class FieldButtons {
-    private static int buttonSize = 10;
     private static List<JButton> listOfButtons = new ArrayList<>();
-    private static List<Integer> bombButtons = new ArrayList<>();
-    private static List<Integer> buttonNumbers = new ArrayList<>();
+    private static List<List<Integer>> allButtonNumberLists = new ArrayList<>();
     private static Map<Integer,ImageIcon> mapOfImages = new HashMap<>();
     private static int numberOfButtons = 100;
-    private static int index = 0;
-    private static int ii = 10;
-    private static int gap = 0;
-    private static int numberOfBombs = 15;
     private static ImageIcon bombImg = new ImageIcon("files/bomb.png");
     private static ImageIcon emptyImg = new ImageIcon("files/empty.png");
     private static ImageIcon oneImg = new ImageIcon("files/one.png");
@@ -28,6 +19,8 @@ class FieldButtons {
     private static ImageIcon fiveImg = new ImageIcon("files/five.png");
 
     JPanel setFieldContent(){
+        int ii = 10;
+        int gap = 0;
         JPanel panel = new JPanel();
         panel.setSize(Window.width,Window.height);
         panel.setLayout(new GridLayout(ii, numberOfButtons / ii, gap, gap));
@@ -40,12 +33,12 @@ class FieldButtons {
         return panel;
     }
     private JButton makeButton(){
+        int buttonSize = 10;
         JButton button = new JButton();
         button.setBorder(new LineBorder(Color.black));
         button.setBackground(Color.gray);
         button.setPreferredSize(new Dimension(buttonSize, buttonSize));
-        //button.setIcon(emptyImg);
-        //setRevealButton(button);
+
         return button;
     }
     private void makeListOfButtons(JPanel panel){
@@ -56,18 +49,17 @@ class FieldButtons {
         }
     }
     private void setBombs(){
+        int numberOfBombs = 15;
         Random random = new Random();
         for(int i = 0; i<numberOfBombs; i++){
             int randomButtonNumber = random.nextInt(numberOfButtons);
             JButton button = listOfButtons.get(randomButtonNumber);
-            //button.setIcon(bombImg);
-            bombButtons.add(randomButtonNumber);
             mapOfImages.put(randomButtonNumber,bombImg);
+            button.addActionListener(bomb);
         }
     }
-
-    private void selectImage(){
-        List<List<Integer>> allButtonNumberLists = new ArrayList<>();
+    private void findButtonNumbers(){
+        List<Integer> buttonNumbers;
         for(int i = 0; i<listOfButtons.size(); i++){
             buttonNumbers = new ArrayList<>();
             buttonNumbers.add(i);
@@ -97,95 +89,83 @@ class FieldButtons {
             }
             allButtonNumberLists.add(buttonNumbers);
         }
+    }
 
+    private void selectImage(){
+        findButtonNumbers();
         for(int i = 0; i<allButtonNumberLists.size(); i++){
             int count = 0;
             for(int j = 1; j<allButtonNumberLists.get(i).size(); j++){
-                if(listOfButtons.get(allButtonNumberLists.get(i).get(j)).getIcon()==bombImg){
+                if(mapOfImages.containsKey(allButtonNumberLists.get(i).get(j))
+                        &&mapOfImages.get(allButtonNumberLists.get(i).get(j))==bombImg){
                     count++;
                 }
             }
+            ImageIcon imageIcon = emptyImg;
+            ActionListener action = empty;
+            if(count==1){
+                imageIcon = oneImg;
+                action = one;
+            } else if(count==2){
+                imageIcon = twoImg;
+                action = two;
+            } else if(count==3){
+                imageIcon = threeImg;
+                action = three;
+            } else if(count==4){
+                imageIcon = fourImg;
+                action = four;
+            } else if(count==5){
+                imageIcon = fiveImg;
+                action = five;
+            }
             if(!mapOfImages.containsKey(i)) {
-                index = i;
-                if (count == 0) {
-                    mapOfImages.put(i,emptyImg);
-                    //listOfButtons.get(i).addActionListener(empty);
-                    index = i;
-                    addEmptyAction(index);
-                    //listOfButtons.get(i).setIcon(emptyImg);
-                } else if (count == 1) {
-                    mapOfImages.put(i,oneImg);
-                    listOfButtons.get(i).addActionListener(one);
-                    listOfButtons.get(i).setIcon(oneImg);
-                } else if (count == 2) {
-                    mapOfImages.put(i,twoImg);
-                    listOfButtons.get(i).setIcon(twoImg);
-                } else if (count == 3){
-                    mapOfImages.put(i,threeImg);
-                    listOfButtons.get(i).setIcon(threeImg);
-                } else if (count == 4){
-                    mapOfImages.put(i,fourImg);
-                    listOfButtons.get(i).setIcon(fourImg);
-                } else {
-                    mapOfImages.put(i,fiveImg);
-                    listOfButtons.get(i).setIcon(fiveImg);
-                }
-            } else {
-                listOfButtons.get(i).addActionListener(bomb);
+                mapOfImages.put(i,imageIcon);
+                listOfButtons.get(i).addActionListener(action);
             }
         }
     }
-    /*
-    private void setRevealButton(JButton button){
-        button.addMouseListener(makeVisible);
-    }*/
-
-    private ActionListener bomb = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("BUUUUUM!");
-            //System.out.println(e.getActionCommand());
-            JButton button = (JButton)e.getSource();
-            button.setIcon(bombImg);
+    private ActionListener empty = e -> {
+        JButton button = (JButton)e.getSource();
+        button.setIcon(emptyImg);
+        int id = listOfButtons.indexOf(button);
+        List<Integer> aaa = allButtonNumberLists.get(id);
+        Set<Integer> set = new TreeSet<>(aaa);
+        for(Integer y: aaa){
+            if(mapOfImages.get(y)==emptyImg) {
+                aaa = allButtonNumberLists.get(y);
+                set.addAll(aaa);
+            }
+        }
+        //System.out.println(set);
+        for(Integer x : set){
+            if(mapOfImages.get(x)!=bombImg) {
+                listOfButtons.get(x).setIcon(mapOfImages.get(x));
+            }
         }
     };
-    private void addEmptyAction(int index){
-        listOfButtons.get(index).addActionListener(empty);
-    }
-    private ActionListener empty = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("empty");
-            listOfButtons.get(index).setIcon(mapOfImages.get(index));
-        }
+    private ActionListener one = e -> {
+        JButton button = (JButton)e.getSource();
+        button.setIcon(oneImg);
     };
-    private ActionListener one = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("one");
-
-        }
+    private ActionListener two = e -> {
+        JButton button = (JButton)e.getSource();
+        button.setIcon(twoImg);
     };
-    private MouseListener makeVisible = new MouseListener() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            //System.out.println("Button clicked!");
-        }
-        @Override
-        public void mousePressed(MouseEvent e) {
-
-        }
-        @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
+    private ActionListener three = e -> {
+        JButton button = (JButton)e.getSource();
+        button.setIcon(threeImg);
+    };
+    private ActionListener four = e -> {
+        JButton button = (JButton)e.getSource();
+        button.setIcon(fourImg);
+    };
+    private ActionListener five = e -> {
+        JButton button = (JButton)e.getSource();
+        button.setIcon(fiveImg);
+    };
+    private ActionListener bomb = e -> {
+        JButton button = (JButton)e.getSource();
+        button.setIcon(bombImg);
     };
 }

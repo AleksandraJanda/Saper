@@ -2,10 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 
 class Menu {
-    private static JMenu start, reset, info;
-    private static JMenuItem information;
-
     static JMenuBar createMenuBar(){
+        JMenu start, reset, info;
+        JMenuItem information;
         JMenuBar menuBar = new JMenuBar();
         start = addMenu("START");
         menuBar.add(start);
@@ -13,13 +12,13 @@ class Menu {
         menuBar.add(reset);
         info = addMenu("INFO");
         info.addSeparator();
-        information = addMenuItem("There are 15 bombs hidden!");
+        information = addMenuItem();
         info.add(information);
         menuBar.add(info);
         return menuBar;
     }
-    private static JMenuItem addMenuItem(String name){
-        JMenuItem menuItem = new JMenuItem(name);
+    private static JMenuItem addMenuItem(){
+        JMenuItem menuItem = new JMenuItem("There are 15 bombs hidden!");
         menuItem.setFont(font());
         return menuItem;
     }
