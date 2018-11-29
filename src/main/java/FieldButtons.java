@@ -13,14 +13,15 @@ class FieldButtons implements MouseListener{
     private static List<JButton> bombButtons = new ArrayList<>();
     static Map<Integer,ImageIcon> mapOfImages = new HashMap<>();
     private static int numberOfButtons = 100;
-    private static ImageIcon bombImg = new ImageIcon("files/bomb.png");
-    private static ImageIcon emptyImg = new ImageIcon("files/empty.png");
-    private static ImageIcon oneImg = new ImageIcon("files/one.png");
-    private static ImageIcon twoImg = new ImageIcon("files/two.png");
-    private static ImageIcon threeImg = new ImageIcon("files/three.png");
-    private static ImageIcon fourImg = new ImageIcon("files/four.png");
-    private static ImageIcon fiveImg = new ImageIcon("files/five.png");
-    private static ImageIcon questionImg = new ImageIcon("files/question.png");
+    protected static ImageIcon bombImg = new ImageIcon("src/bomb.png");
+    private static ImageIcon emptyImg = new ImageIcon("src/empty.png");
+    private static ImageIcon oneImg = new ImageIcon("src/one.png");
+    private static ImageIcon twoImg = new ImageIcon("src/two.png");
+    private static ImageIcon threeImg = new ImageIcon("src/three.png");
+    private static ImageIcon fourImg = new ImageIcon("src/four.png");
+    private static ImageIcon fiveImg = new ImageIcon("src/five.png");
+    private static ImageIcon questionImg = new ImageIcon("src/question.png");
+    private static ImageIcon checkImg = new ImageIcon("src/check.png");
 
     JPanel setFieldContent(){
         int ii = 10;
@@ -151,7 +152,7 @@ class FieldButtons implements MouseListener{
         Set<Integer> set = new TreeSet<>(aaa);
         set.addAll(getButtonsToReveal(set,id,0));
         for(Integer x : set){
-            if(mapOfImages.get(x)!=bombImg) {
+            if(mapOfImages.get(x)!=bombImg&&listOfButtons.get(x).getIcon()!=questionImg) {
                 listOfButtons.get(x).setIcon(mapOfImages.get(x));
             }
         }
@@ -174,6 +175,7 @@ class FieldButtons implements MouseListener{
     };
     private ActionListener five = e -> {
         JButton button = (JButton)e.getSource();
+
         button.setIcon(fiveImg);
     };
     private ActionListener bomb = e -> {
