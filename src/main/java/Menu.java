@@ -10,7 +10,7 @@ class Menu {
         JMenuItem rightButtonInfo;
         JMenuItem information;
         JMenuBar menuBar = new JMenuBar();
-        reset = addMenu("START NEW GAME");
+        reset = addMenu("NEW GAME");
         menuBar.add(reset);
         info = addMenu("INFO");
         info.addSeparator();

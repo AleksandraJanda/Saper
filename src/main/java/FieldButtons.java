@@ -136,9 +136,15 @@ class FieldButtons implements MouseListener{
             if(mapOfImages.get(x)==emptyImg) {
                 aaa = allButtonNumberLists.get(x);
                 set.addAll(aaa);
-                if(turn<=12) {
-                    turn++;
-                    aaa = getButtonsToReveal(set, x, turn);
+                for(Integer y: aaa){
+                    if(mapOfImages.get(y)==emptyImg) {
+                        aaa = allButtonNumberLists.get(y);
+                        set.addAll(aaa);
+                        if (turn <= 12) {
+                            turn++;
+                            aaa = getButtonsToReveal(set, y, turn);
+                        }
+                    }
                 }
             }
         }
@@ -190,11 +196,17 @@ class FieldButtons implements MouseListener{
             x.removeActionListener(five);
             x.removeMouseListener(this);
         }
+        int count = 0;
         for(JButton x: bombButtons){
-            x.setIcon(bombImg);
+            if(x.getIcon()==questionImg){
+                count++;
+                x.setIcon(checkImg);
+            } else {
+                x.setIcon(bombImg);
+            }
         }
-        Menu.gameStatus.setText("-----Game over!-----");
-        Menu.gameStatus.setSelected(true);
+        Menu.gameStatus.setText("-----Game over!----- Score: "+count+"/15");
+        //Menu.gameStatus.setSelected(true);
     };
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -209,7 +221,10 @@ class FieldButtons implements MouseListener{
             }
             if(count==15){
                 Menu.gameStatus.setText("-----You won!-----");
-                Menu.gameStatus.setSelected(true);
+                //Menu.gameStatus.setSelected(true);
+                for(JButton x: bombButtons){
+                    x.setIcon(checkImg);
+                }
             }
         }
         if(e.getButton()== MouseEvent.BUTTON2){
