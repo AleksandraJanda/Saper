@@ -206,30 +206,33 @@ class FieldButtons implements MouseListener{
             }
         }
         Menu.gameStatus.setText("-----Game over!----- Score: "+count+"/15");
-        //Menu.gameStatus.setSelected(true);
     };
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(e.getButton()== MouseEvent.BUTTON3){
-            JButton button = (JButton)e.getSource();
-            button.setIcon(questionImg);
-            int count = 0;
-            for(JButton x: bombButtons){
-                if(x.getIcon()==questionImg){
-                    count++;
+        int count = 0;
+        if(e.getButton()== MouseEvent.BUTTON3) {
+            JButton button = (JButton) e.getSource();
+            if (button.getIcon() == null) {
+                button.setIcon(questionImg);
+                count = 0;
+                for (JButton x : bombButtons) {
+                    if (x.getIcon() == questionImg) {
+                        count++;
+                    }
                 }
             }
-            if(count==15){
+            if (count == 15) {
                 Menu.gameStatus.setText("-----You won!-----");
-                //Menu.gameStatus.setSelected(true);
-                for(JButton x: bombButtons){
+                for (JButton x : bombButtons) {
                     x.setIcon(checkImg);
                 }
             }
         }
         if(e.getButton()== MouseEvent.BUTTON2){
             JButton button = (JButton)e.getSource();
-            button.setIcon(null);
+            if(button.getIcon()==questionImg) {
+                button.setIcon(null);
+            }
         }
     }
     @Override

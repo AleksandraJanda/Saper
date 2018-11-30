@@ -12,7 +12,7 @@ class Menu {
         JMenuBar menuBar = new JMenuBar();
         reset = addMenu("NEW GAME");
         menuBar.add(reset);
-        info = addMenu("INFO");
+        info = addMenu("INFO:");
         info.addSeparator();
         information = addMenuItem("There are 15 bombs hidden!");
         info.add(information);
