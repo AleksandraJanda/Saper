@@ -13,15 +13,15 @@ class FieldButtons implements MouseListener{
     private static List<JButton> bombButtons = new ArrayList<>();
     static Map<Integer,ImageIcon> mapOfImages = new HashMap<>();
     private static int numberOfButtons = 100;
-    protected static ImageIcon bombImg = new ImageIcon("src/bomb.png");
-    private static ImageIcon emptyImg = new ImageIcon("src/empty.png");
-    private static ImageIcon oneImg = new ImageIcon("src/one.png");
-    private static ImageIcon twoImg = new ImageIcon("src/two.png");
-    private static ImageIcon threeImg = new ImageIcon("src/three.png");
-    private static ImageIcon fourImg = new ImageIcon("src/four.png");
-    private static ImageIcon fiveImg = new ImageIcon("src/five.png");
-    private static ImageIcon questionImg = new ImageIcon("src/question.png");
-    private static ImageIcon checkImg = new ImageIcon("src/check.png");
+    static ImageIcon bombImg = new ImageIcon("src/main/resources/bomb.png");
+    private static ImageIcon emptyImg = new ImageIcon("src/main/resources/empty.png");
+    private static ImageIcon oneImg = new ImageIcon("src/main/resources/one.png");
+    private static ImageIcon twoImg = new ImageIcon("src/main/resources/two.png");
+    private static ImageIcon threeImg = new ImageIcon("src/main/resources/three.png");
+    private static ImageIcon fourImg = new ImageIcon("src/main/resources/four.png");
+    private static ImageIcon fiveImg = new ImageIcon("src/main/resources/five.png");
+    private static ImageIcon questionImg = new ImageIcon("src/main/resources/question.png");
+    private static ImageIcon checkImg = new ImageIcon("src/main/resources/check.png");
 
     JPanel setFieldContent(){
         int ii = 10;

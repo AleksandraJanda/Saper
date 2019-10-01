@@ -12,6 +12,7 @@ class Window extends JFrame implements MouseListener{
         super("Saper");
         Dimension size = new Dimension(width,height);
         setSize(size);
+        setIconImage(FieldButtons.bombImg.getImage());
         setJMenuBar(Menu.createMenuBar());
         Menu.reset.addMouseListener(this);
         setContentPane(Content.setAppContent());
